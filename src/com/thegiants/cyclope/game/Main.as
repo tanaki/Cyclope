@@ -8,12 +8,14 @@ package com.thegiants.cyclope.game
 	import flash.text.TextField;
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
+	import starling.core.Starling;
 	
 	/**
 	 * @author nico
 	 */
 	public class Main extends Sprite 
 	{
+		private var _starling:Starling;
 		
 		public function Main():void 
 		{
@@ -22,12 +24,15 @@ package com.thegiants.cyclope.game
 			stage.addEventListener(Event.DEACTIVATE, deactivate);
 			
 			// touch or gesture?
+			Starling.multitouchEnabled = true;
 			Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
 			
-			// entry point
-			var tf : TextField = new TextField();
-			tf.text = "Mobile test";
-			addChild(tf);
+			// init Starling
+			_starling = new Starling(CyclopeGame, stage);
+			_starling.simulateMultitouch = true;
+			_starling.showStats = true;
+			_starling.antiAliasing = 1;
+			_starling.start();
 			
 		}
 		

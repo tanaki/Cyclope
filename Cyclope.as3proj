@@ -5,18 +5,20 @@
     <movie outputType="Application" />
     <movie input="" />
     <movie path="bin\Cyclope.swf" />
-    <movie fps="60" />
-    <movie width="480" />
-    <movie height="800" />
+    <movie fps="30" />
+    <movie width="800" />
+    <movie height="480" />
     <movie version="3" />
     <movie minorVersion="2" />
     <movie platform="AIR Mobile" />
-    <movie background="#FFFFFF" />
+    <movie background="#000000" />
+    <movie preferredSDK="Flex 4.6.0, AIR 3.2;4.6.0, 3.2;" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
     <class path="src" />
     <class path="lib" />
+    <class path="..\Starling-Framework\starling\src" />
   </classpaths>
   <!-- Build options -->
   <build>
@@ -51,7 +53,7 @@
   </includeLibraries>
   <!-- SWC Libraries -->
   <libraryPaths>
-    <element path="lib\starling.swc" />
+    <!-- example: <element path="..." /> -->
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

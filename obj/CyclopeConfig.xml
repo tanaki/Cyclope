@@ -16,25 +16,23 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'23/04/2012'</value>
+      <value>'28/04/2012'</value>
     </define>
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
       <path-element>E:\wamp\www\AIR\AS3\Cyclope\git\src</path-element>
       <path-element>E:\wamp\www\AIR\AS3\Cyclope\git\lib</path-element>
+      <path-element>E:\wamp\www\AIR\AS3\Cyclope\Starling-Framework\starling\src</path-element>
       <path-element>C:\Program Files (x86)\FlashDevelop\Library\AS3\classes</path-element>
     </source-path>
-    <library-path append="true">
-      <path-element>E:\wamp\www\AIR\AS3\Cyclope\git\lib\starling.swc</path-element>
-    </library-path>
   </compiler>
   <file-specs>
     <path-element>E:\wamp\www\AIR\AS3\Cyclope\git\src\com\thegiants\cyclope\game\Main.as</path-element>
   </file-specs>
-  <default-background-color>#FFFFFF</default-background-color>
-  <default-frame-rate>60</default-frame-rate>
+  <default-background-color>#000000</default-background-color>
+  <default-frame-rate>30</default-frame-rate>
   <default-size>
-    <width>480</width>
-    <height>800</height>
+    <width>800</width>
+    <height>480</height>
   </default-size>
 </flex-config>
