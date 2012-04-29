@@ -16,13 +16,14 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'28/04/2012'</value>
+      <value>'29/04/2012'</value>
     </define>
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
       <path-element>E:\wamp\www\AIR\AS3\Cyclope\git\src</path-element>
       <path-element>E:\wamp\www\AIR\AS3\Cyclope\git\lib</path-element>
       <path-element>E:\wamp\www\AIR\AS3\Cyclope\Starling-Framework\starling\src</path-element>
+      <path-element>E:\wamp\www\AS3\Libs</path-element>
       <path-element>C:\Program Files (x86)\FlashDevelop\Library\AS3\classes</path-element>
     </source-path>
   </compiler>

@@ -1,29 +1,18 @@
 package com.thegiants.cyclope.game.screens 
 {
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.display.Shape;
-	import flash.geom.Point;
-	import starling.display.BlendMode;
-	import starling.display.Image;
+	import com.thegiants.cyclope.game.events.NavigationEvent;
+	import com.thegiants.cyclope.game.screens.interfaces.IScreen;
+	import starling.display.Button;
 	import starling.display.Sprite;
 	import starling.events.Event;
-	import starling.events.Touch;
-	import starling.events.TouchEvent;
-	import starling.events.TouchPhase;
-	import starling.text.TextField;
 	import starling.textures.Texture;
 	
 	/**
 	 * @author nico
 	 */
-	public class WelcomeScreen extends Sprite 
+	public class WelcomeScreen extends Sprite implements IScreen
 	{
-		private var 
-			path : Shape,
-			bmp : BitmapData,
-			texture : Texture,
-			image : Image;
+		private var playButton:Button;
 		
 		public function WelcomeScreen() 
 		{
@@ -35,35 +24,34 @@ package com.thegiants.cyclope.game.screens
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			
 			trace("welcome screen initialized");
-			addEventListener(TouchEvent.TOUCH, onTouch);
 			
-			bmp = new BitmapData(800, 480, true, 0x000000);
-			texture = Texture.fromBitmapData(bmp);
-			image = new Image(texture);
-			image.blendMode = BlendMode.NONE;
+			playButton = new Button(Texture.empty());
+			playButton.x = (stage.stageWidth - playButton.width) >> 1;
+			playButton.y = (stage.stageHeight - playButton.height) >> 1;
+			addChild(playButton);
 			
-			addChild(image);
+			addEventListener(Event.TRIGGERED, onMenuClick);
 		}
 		
-		private function onTouch(e:TouchEvent):void 
+		private function onMenuClick(e:Event):void 
 		{
-			var touch:Touch = e.getTouch(this, TouchPhase.MOVED);
-			if (touch)
+			var buttonClicked : Button = (e.target as Button);
+			if ( buttonClicked == playButton ) 
 			{
-				var localPos:Point = touch.getLocation(this);
-				
-				if ( path ) {
-					path.graphics.lineTo( localPos.x, localPos.y );
-				} else {					
-					path = new Shape();
-					path.graphics.lineStyle(2, 0xffffff);
-					path.graphics.moveTo( localPos.x, localPos.y );
-				}
-				
-				bmp.draw(path);
-				texture = Texture.fromBitmapData(bmp);
-				image.texture = texture;
+				dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, { id : "play" }, true) );
 			}
-		}	
+		}
+		
+		public function initialize():void
+		{
+			visible = true;
+		}
+		
+		public function disposeTemporarily():void 
+		{
+			visible = false;
+			
+			// TODO remove event listeners
+		}
 	}
 }

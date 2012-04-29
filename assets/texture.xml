@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="texture.png">
+    <SubTexture name="cyclope" x="2" y="2" width="359" height="265"/>
+    <SubTexture name="human" x="361" y="1" width="10" height="14"/>
+    <SubTexture name="tree" x="372" y="1" width="44" height="68"/>
+    <SubTexture name="ground" x="2" y="268" width="800" height="3"/>
+</TextureAtlas>

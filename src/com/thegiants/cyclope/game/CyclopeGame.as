@@ -1,5 +1,7 @@
 package com.thegiants.cyclope.game 
 {
+	import com.thegiants.cyclope.game.events.NavigationEvent;
+	import com.thegiants.cyclope.game.screens.GameScreen;
 	import com.thegiants.cyclope.game.screens.WelcomeScreen;
 	import flash.display.BitmapData;
 	import flash.display.Shape;
@@ -16,7 +18,9 @@ package com.thegiants.cyclope.game
 	 */
 	public class CyclopeGame extends Sprite 
 	{
-		private var screenWelcome : WelcomeScreen;
+		private var 
+			screenWelcome : WelcomeScreen,
+			screenGame : GameScreen;
 		
 		public function CyclopeGame() 
 		{
@@ -27,8 +31,27 @@ package com.thegiants.cyclope.game
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			
+			addEventListener(NavigationEvent.CHANGE_SCREEN, onChangeScreen);
+			
+			screenGame = new GameScreen();
+			screenGame.disposeTemporarily();
+			addChild(screenGame);
+			
 			screenWelcome = new WelcomeScreen();
 			addChild(screenWelcome);
+			screenWelcome.initialize();
+		}
+		
+		private function onChangeScreen(e:NavigationEvent):void 
+		{
+			switch( e.params.id ) {
+				
+				case "play" : 
+					screenWelcome.disposeTemporarily();
+					screenGame.initialize();
+					break;
+				
+			}
 		}
 		
 	}
