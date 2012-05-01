@@ -34,12 +34,12 @@ package com.thegiants.cyclope.game
 			addEventListener(NavigationEvent.CHANGE_SCREEN, onChangeScreen);
 			
 			screenGame = new GameScreen();
-			screenGame.disposeTemporarily();
 			addChild(screenGame);
+			screenGame.initialize();
 			
-			screenWelcome = new WelcomeScreen();
-			addChild(screenWelcome);
-			screenWelcome.initialize();
+			//screenWelcome = new WelcomeScreen();
+			//addChild(screenWelcome);
+			//screenWelcome.initialize();
 		}
 		
 		private function onChangeScreen(e:NavigationEvent):void 
