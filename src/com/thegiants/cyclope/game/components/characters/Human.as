@@ -1,9 +1,10 @@
 package com.thegiants.cyclope.game.components.characters 
 {
 	import aze.motion.eaze;
+	import com.fnicollet.BitmapDataCacher;
 	import com.thegiants.cyclope.game.assets.Assets;
 	import com.thegiants.cyclope.game.components.interfaces.ICharacter;
-	import com.thegiants.cyclope.game.components.interfaces.IHiddable;
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Shape;
 	import starling.display.Image;
@@ -18,9 +19,13 @@ package com.thegiants.cyclope.game.components.characters
 	/**
 	 * @author nico
 	 */
-	public class Human extends Sprite implements ICharacter 
+	public class Human extends Sprite implements ICharacter
 	{
-		private var _hiddableIndex : int = 0;
+		
+		private var 
+			_hiddableIndex : int = 0,
+			_vulnerable : Boolean =  false,
+			_bitmapData:BitmapData;
 		
 		public function Human() 
 		{
@@ -29,17 +34,17 @@ package com.thegiants.cyclope.game.components.characters
 		
 		private function initGraphics():void 
 		{
-			var s : Shape = new Shape();
-			s.graphics.beginFill(0x666666, .1);
-			s.graphics.drawCircle( 40, 40, 40);
+			var humanShape : Shape = new Shape();
+			humanShape.graphics.beginFill(0x666666, .1);
+			humanShape.graphics.drawCircle( 40, 40, 40);
 			
-			var bmp : BitmapData = new BitmapData(80, 80, true, 0xff9900);
-			bmp.draw(s);
-			var t2 : Texture = Texture.fromBitmapData(bmp);
-			var img2 : Image = new Image(t2);
-			img2.x = -40;
-			img2.y = -40;
-			addChild(img2);
+			var humanBmp : BitmapData = new BitmapData(80, 80, true, 0xff9900);
+			humanBmp.draw(humanShape);
+			var humanTexture : Texture = Texture.fromBitmapData(humanBmp);
+			var humanImage : Image = new Image(humanTexture);
+			humanImage.x = -40;
+			humanImage.y = -40;
+			addChild(humanImage);
 			
 			var textures : Vector.<Texture> = Assets.getAtlas().getTextures("human");
 			var mc : MovieClip = new MovieClip(textures);
@@ -47,11 +52,20 @@ package com.thegiants.cyclope.game.components.characters
 			mc.y = Math.ceil( -mc.height >> 1 );
 			addChild(mc);
 			
+			BitmapDataCacher.cacheBitmap("human", Bitmap(new Assets.AtlasTexture()), XML(new Assets.AtlasXml()) );
 		}
 		
 		public function move ( x:Number, y:Number, duration : Number = 0 ): void 
 		{
-			eaze(this).to( duration, { x : x, y : y } );
+			eaze(this)
+				.to( duration, { x : x, y : y } )
+				.onStart(setVulnerable, true)
+				.onComplete(setVulnerable, false);
+		}
+		
+		public function setVulnerable (value:Boolean):void 
+		{
+			_vulnerable = value;
 		}
 		
 		public function get hiddableIndex():int 
@@ -62,6 +76,16 @@ package com.thegiants.cyclope.game.components.characters
 		public function set hiddableIndex(value:int):void 
 		{
 			_hiddableIndex = value;
+		}
+		
+		public function get vulnerable():Boolean 
+		{
+			return _vulnerable;
+		}
+		
+		public function getBitmapData():BitmapData 
+		{
+			return _bitmapData;
 		}
 	}
 

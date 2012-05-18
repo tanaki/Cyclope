@@ -4,9 +4,9 @@ call bat\SetupSDK.bat
 call bat\SetupApplication.bat
 
 :target
-goto desktop
+::goto desktop
 ::goto android-debug
-::goto android-test
+goto android-test
 ::goto ios-debug
 ::goto ios-test
 set DEBUG_IP = 192.168.1.68

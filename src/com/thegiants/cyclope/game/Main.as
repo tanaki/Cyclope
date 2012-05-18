@@ -25,6 +25,7 @@ package com.thegiants.cyclope.game
 			
 			// touch or gesture?
 			Starling.multitouchEnabled = true;
+			Starling.handleLostContext = true;
 			Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
 			
 			// init Starling

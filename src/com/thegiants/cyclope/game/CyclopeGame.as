@@ -2,6 +2,7 @@ package com.thegiants.cyclope.game
 {
 	import com.thegiants.cyclope.game.events.NavigationEvent;
 	import com.thegiants.cyclope.game.screens.GameScreen;
+	import com.thegiants.cyclope.game.screens.LevelScreen;
 	import com.thegiants.cyclope.game.screens.WelcomeScreen;
 	import flash.display.BitmapData;
 	import flash.display.Shape;
@@ -20,7 +21,8 @@ package com.thegiants.cyclope.game
 	{
 		private var 
 			screenWelcome : WelcomeScreen,
-			screenGame : GameScreen;
+			screenGame : GameScreen,
+			screenLevel : LevelScreen;
 		
 		public function CyclopeGame() 
 		{
@@ -35,11 +37,17 @@ package com.thegiants.cyclope.game
 			
 			screenGame = new GameScreen();
 			addChild(screenGame);
-			screenGame.initialize();
+			screenGame.disposeTemporarily();
 			
-			//screenWelcome = new WelcomeScreen();
-			//addChild(screenWelcome);
-			//screenWelcome.initialize();
+			screenLevel = new LevelScreen();
+			addChild(screenLevel);
+			screenLevel.disposeTemporarily();
+			//screenLevel.initialize();
+			
+			screenWelcome = new WelcomeScreen();
+			addChild(screenWelcome);
+			//screenWelcome.disposeTemporarily();
+			screenWelcome.initialize();
 		}
 		
 		private function onChangeScreen(e:NavigationEvent):void 
@@ -48,9 +56,14 @@ package com.thegiants.cyclope.game
 				
 				case "play" : 
 					screenWelcome.disposeTemporarily();
+					screenLevel.disposeTemporarily();
 					screenGame.initialize();
 					break;
-				
+				case "level" :
+					screenGame.disposeTemporarily();
+					screenLevel.level = int(e.params.level);
+					screenLevel.initialize();
+					break;
 			}
 		}
 		

@@ -2,12 +2,16 @@ package com.thegiants.cyclope.game.screens
 {
 	import aze.motion.easing.Linear;
 	import aze.motion.eaze;
+	import com.adobe.utils.ArrayUtil;
+	import com.fnicollet.BitmapDataCacher;
 	import com.nicolaspigelet.utils.MathUtils;
+	import com.thegiants.cyclope.game.assets.Assets;
 	import com.thegiants.cyclope.game.components.characters.Cyclope;
 	import com.thegiants.cyclope.game.components.characters.Human;
 	import com.thegiants.cyclope.game.components.interfaces.IHiddable;
 	import com.thegiants.cyclope.game.components.scenery.Ground;
 	import com.thegiants.cyclope.game.components.scenery.Tree;
+	import com.thegiants.cyclope.game.events.NavigationEvent;
 	import com.thegiants.cyclope.game.screens.interfaces.IScreen;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -25,6 +29,7 @@ package com.thegiants.cyclope.game.screens
 	import starling.textures.Texture;
 	import starling.utils.deg2rad;
 	import starling.utils.HAlign;
+	import ws.tink.display.HitTest;
 	
 	/**
 	 * @author nico
@@ -34,6 +39,8 @@ package com.thegiants.cyclope.game.screens
 		
 		private var 
 			_score : int = 0,
+			_level : int = 1,
+			stopEye : Boolean = true,
 			scoreTF : TextField,
 			path : Shape,
 			bmp : BitmapData,
@@ -55,8 +62,6 @@ package com.thegiants.cyclope.game.screens
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			
 			trace("game screen initialized");
-			addEventListener(TouchEvent.TOUCH, onTouch);
-			
 			initGraphics();
 		}
 		
@@ -95,7 +100,7 @@ package com.thegiants.cyclope.game.screens
 			imageDangerZone.pivotX = 80;
 			imageDangerZone.rotation = deg2rad(80);
 			addChild(imageDangerZone);
-			rotateRight();
+			BitmapDataCacher.cacheBitmap("dangerZone", new Bitmap(bmpDangerZone));
 			
 			// add random trees
 			trees = new Vector.<Tree>();
@@ -126,12 +131,46 @@ package com.thegiants.cyclope.game.screens
 		
 		private function rotateRight():void 
 		{
-			eaze(imageDangerZone).to( 5, { rotation : deg2rad(-80) }).easing(Linear.easeNone).onComplete(rotateLeft);
+			
+			if (!stopEye) {
+				eaze(imageDangerZone)
+					.to( 5, { rotation : deg2rad( -80) } )
+					.easing(Linear.easeNone)
+					.onUpdate(checkHitTest)
+					.onComplete(rotateLeft);
+			}
+		}
+		 
+		private function checkHitTest():void 
+		{
+			for ( var i : int = 0, l : int = humans.length; i < l; i++ ) {
+				
+				var human : Human = Human( humans[i] );
+				if ( human.vulnerable ) {
+					
+					var 
+						bmpDataHuman : BitmapData = BitmapDataCacher.getBitmapData("human", "human"),
+						bmpDataDangerZone : BitmapData = BitmapDataCacher.getBitmapData("dangerZone", "");
+					
+					var hit : Boolean = HitTest.complexHitTestObject( human, bmpDataHuman, imageDangerZone, bmpDataDangerZone );
+					if ( hit ) {
+						removeChild(human);
+						removeHuman(human);
+						break;
+					}
+				}
+				
+			}
 		}
 		
 		private function rotateLeft():void 
 		{
-			eaze(imageDangerZone).to( 5, { rotation : deg2rad(80) }).easing(Linear.easeNone).onComplete(rotateRight);
+			if (!stopEye) {
+				eaze(imageDangerZone)
+					.to( 5, { rotation : deg2rad(80) } )
+					.easing(Linear.easeNone)
+					.onComplete(rotateRight);
+			}
 		}
 		
 		private function onTouch(e:TouchEvent):void 
@@ -159,6 +198,7 @@ package com.thegiants.cyclope.game.screens
 									touchedHuman.move( closerHiddable.x, closerHiddable.y + (closerHiddable.height >> 1), 0.5 );
 								} else if ( touchedHuman.hiddableIndex == trees.length ) {
 									touchedHuman.move( stage.stageWidth + touchedHuman.width, touchedHuman.y, 0.5 );
+									removeHuman(touchedHuman);
 									score++;
 								}
 							}
@@ -171,16 +211,21 @@ package com.thegiants.cyclope.game.screens
 		
 		public function initialize():void
 		{
+			alpha = 1;
 			visible = true;
+			stopEye = false;
 			
-			// TODO add event listeners
+			addEventListener(TouchEvent.TOUCH, onTouch);
+			rotateRight();
 		}
 		
 		public function disposeTemporarily():void 
 		{
-			visible = false;
+			// visible = false;
+			alpha = .3;
 			
-			// TODO remove event listeners
+			removeEventListener(TouchEvent.TOUCH, onTouch);
+			stopEye = true;
 		}
 		
 		public function get score():int 
@@ -192,6 +237,29 @@ package com.thegiants.cyclope.game.screens
 		{
 			_score = value;
 			scoreTF.text = _score.toString();
+			checkLevelFinished();
+		}
+		
+		private function removeHuman ( human:Human ):void
+		{
+			var len:uint = humans.length - 1;
+			
+			for(var i:Number = len; i > -1; i--)
+			{
+				if( humans[i] === human)
+				{
+					humans.splice(i, 1);
+				}
+			}
+			checkLevelFinished();
+		}
+		
+		private function checkLevelFinished():void 
+		{
+			if ( humans.length == 0 ) {
+				_level++;
+				dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, { id : "level", level : _level }, true) );
+			}
 		}
 	}
 

@@ -35,7 +35,7 @@
     <title>Cyclope</title>
     <content>Cyclope.swf</content>
     <visible>true</visible>
-    <!--<fullScreen>true</fullScreen>-->
+    <fullScreen>true</fullScreen>
     <autoOrients>false</autoOrients>
     <aspectRatio>landscape</aspectRatio>
     <renderMode>direct</renderMode>

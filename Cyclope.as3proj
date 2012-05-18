@@ -19,7 +19,8 @@
     <class path="src" />
     <class path="lib" />
     <class path="..\Starling-Framework\starling\src" />
-    <class path="..\..\..\..\AS3\Libs" />
+    <class path="..\..\..\..\AS3\Libs\as3corelib\src" />
+    <class path="..\..\..\..\AS3\Libs\perso" />
   </classpaths>
   <!-- Build options -->
   <build>
