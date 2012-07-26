@@ -6,16 +6,16 @@ call bat\SetupApplication.bat
 :target
 ::goto desktop
 ::goto android-debug
-goto android-test
+::goto android-test
 ::goto ios-debug
-::goto ios-test
+goto ios-test
 set DEBUG_IP = 192.168.1.68
 
 :desktop
 :: http://help.adobe.com/en_US/air/build/WSfffb011ac560372f-6fa6d7e0128cca93d31-8000.html
 
-set SCREEN_SIZE=WVGA
-::set SCREEN_SIZE=iPhoneRetina
+::set SCREEN_SIZE=WVGA
+set SCREEN_SIZE=iPhoneRetina
 
 :desktop-run
 echo.
